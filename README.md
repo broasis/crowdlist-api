@@ -55,6 +55,7 @@ type Mutation {
   deleteList(id: String!): List!
   voteItem(itemId: String!, userId: String!): ListItem!
 }
+```
 
 ## Changelog
 
