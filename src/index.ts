@@ -12,6 +12,7 @@ export const server = new ApolloServer({
   plugins: [
     ApolloServerPluginLandingPageGraphQLPlayground(),
   ],
+  introspection: true,
 });
 
 const port = process.env.PORT || 5000;
