@@ -9,11 +9,13 @@ export interface Context {
 }
 
 export const context: ContextFunction = async ({ req }) => {
-  const userId = req.headers.userid || undefined;
+  const userId = req.headers.userid;
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-  });
+  const user = !userId
+    ? undefined
+    : await prisma.user.findUnique({
+        where: { id: userId },
+      });
 
   return {
     prisma,
