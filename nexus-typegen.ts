@@ -87,6 +87,7 @@ export interface NexusGenFieldTypes {
     authenticatedUser: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     getAllItems: NexusGenRootTypes['ListItem'][]; // [ListItem!]!
     getItemsFromList: NexusGenRootTypes['ListItem'][]; // [ListItem!]!
+    getListById: NexusGenRootTypes['List'] | null; // List
     lists: NexusGenRootTypes['List'][]; // [List!]!
     users: NexusGenRootTypes['User'][]; // [User!]!
   }
@@ -124,6 +125,7 @@ export interface NexusGenFieldTypeNames {
     authenticatedUser: 'AuthPayload'
     getAllItems: 'ListItem'
     getItemsFromList: 'ListItem'
+    getListById: 'List'
     lists: 'List'
     users: 'User'
   }
@@ -158,6 +160,9 @@ export interface NexusGenArgTypes {
   Query: {
     getItemsFromList: { // args
       listId: string; // String!
+    }
+    getListById: { // args
+      id: string; // String!
     }
   }
 }

@@ -33,6 +33,7 @@ type Query {
   authenticatedUser: AuthPayload
   getAllItems: [ListItem!]!
   getItemsFromList(listId: String!): [ListItem!]!
+  getListById(id: String!): List
   lists: [List!]!
   users: [User!]!
 }
