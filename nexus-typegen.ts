@@ -28,6 +28,9 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  AuthPayload: { // root type
+    user?: NexusGenRootTypes['User'] | null; // User
+  }
   List: { // root type
     id: string; // String!
     name: string; // String!
@@ -40,6 +43,10 @@ export interface NexusGenObjects {
   }
   Mutation: {};
   Query: {};
+  User: { // root type
+    id?: string | null; // String
+    name?: string | null; // String
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -53,6 +60,9 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  AuthPayload: { // field return type
+    user: NexusGenRootTypes['User'] | null; // User
+  }
   List: { // field return type
     id: string; // String!
     items: NexusGenRootTypes['ListItem'][]; // [ListItem!]!
@@ -68,17 +78,28 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addItem: NexusGenRootTypes['ListItem']; // ListItem!
     addList: NexusGenRootTypes['List']; // List!
+    addUser: NexusGenRootTypes['User']; // User!
+    authenticateUser: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     deleteList: NexusGenRootTypes['List']; // List!
     voteItem: NexusGenRootTypes['ListItem']; // ListItem!
   }
   Query: { // field return type
+    authenticatedUser: NexusGenRootTypes['AuthPayload'] | null; // AuthPayload
     getAllItems: NexusGenRootTypes['ListItem'][]; // [ListItem!]!
     getItemsFromList: NexusGenRootTypes['ListItem'][]; // [ListItem!]!
     lists: NexusGenRootTypes['List'][]; // [List!]!
+    users: NexusGenRootTypes['User'][]; // [User!]!
+  }
+  User: { // field return type
+    id: string | null; // String
+    name: string | null; // String
   }
 }
 
 export interface NexusGenFieldTypeNames {
+  AuthPayload: { // field return type name
+    user: 'User'
+  }
   List: { // field return type name
     id: 'String'
     items: 'ListItem'
@@ -94,13 +115,21 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     addItem: 'ListItem'
     addList: 'List'
+    addUser: 'User'
+    authenticateUser: 'AuthPayload'
     deleteList: 'List'
     voteItem: 'ListItem'
   }
   Query: { // field return type name
+    authenticatedUser: 'AuthPayload'
     getAllItems: 'ListItem'
     getItemsFromList: 'ListItem'
     lists: 'List'
+    users: 'User'
+  }
+  User: { // field return type name
+    id: 'String'
+    name: 'String'
   }
 }
 
@@ -109,17 +138,21 @@ export interface NexusGenArgTypes {
     addItem: { // args
       listId: string; // String!
       name: string; // String!
-      userId: string; // String!
     }
     addList: { // args
       name: string; // String!
+    }
+    addUser: { // args
+      name: string; // String!
+    }
+    authenticateUser: { // args
+      userId: string; // String!
     }
     deleteList: { // args
       id: string; // String!
     }
     voteItem: { // args
       itemId: string; // String!
-      userId: string; // String!
     }
   }
   Query: {

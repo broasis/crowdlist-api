@@ -23,8 +23,8 @@ export const ListQuery = extendType({
   definition(t) {
     t.nonNull.list.nonNull.field("lists", {
       type: "List",
-      resolve(_, __, context) {
-        return context.prisma.list.findMany();
+      async resolve(_, __, context) {
+        return await context.prisma.list.findMany();
       },
     });
   },
