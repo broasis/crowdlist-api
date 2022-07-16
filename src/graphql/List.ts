@@ -21,6 +21,18 @@ export const List = objectType({
 export const ListQuery = extendType({
   type: "Query",
   definition(t) {
+    t.field("getListById", {
+      type: "List",
+      args: {
+        id: nonNull(stringArg()),
+      },
+      async resolve(_, args, context) {
+        return await context.prisma.list.findUnique({
+          where: { id: args.id },
+        });
+      },
+    });
+
     t.nonNull.list.nonNull.field("lists", {
       type: "List",
       async resolve(_, __, context) {

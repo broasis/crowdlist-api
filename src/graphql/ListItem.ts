@@ -1,5 +1,5 @@
 import { ApolloError } from "apollo-server";
-import { arg, extendType, nonNull, objectType, stringArg } from "nexus";
+import { extendType, nonNull, objectType, stringArg } from "nexus";
 
 export const ListItem = objectType({
   name: "ListItem",
