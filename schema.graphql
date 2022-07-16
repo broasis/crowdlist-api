@@ -2,6 +2,10 @@
 ### Do not make changes to this file directly
 
 
+type AuthPayload {
+  user: User
+}
+
 type List {
   id: String!
   items: [ListItem!]!
@@ -17,14 +21,23 @@ type ListItem {
 }
 
 type Mutation {
-  addItem(listId: String!, name: String!, userId: String!): ListItem!
+  addItem(listId: String!, name: String!): ListItem!
   addList(name: String!): List!
+  addUser(name: String!): User!
+  authenticateUser(userId: String!): AuthPayload!
   deleteList(id: String!): List!
-  voteItem(itemId: String!, userId: String!): ListItem!
+  voteItem(itemId: String!): ListItem!
 }
 
 type Query {
+  authenticatedUser: AuthPayload
   getAllItems: [ListItem!]!
   getItemsFromList(listId: String!): [ListItem!]!
   lists: [List!]!
+  users: [User!]!
+}
+
+type User {
+  id: String
+  name: String
 }

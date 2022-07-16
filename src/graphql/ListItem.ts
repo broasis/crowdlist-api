@@ -61,20 +61,24 @@ export const ListItemMutation = extendType({
       args: {
         listId: nonNull(stringArg()),
         name: nonNull(stringArg()),
-        userId: nonNull(stringArg()),
       },
       async resolve(_, args, context) {
-        const { listId, name, userId } = args;
+        const { listId, name } = args;
+
+        if (!context.userId) {
+          throw new ApolloError(`Authentication failed.`);
+        }
 
         const itemExists = await context.prisma.listItem.findFirst({
           where: {
-            name: name,
+            listId,
+            name,
           },
         });
 
         if (itemExists) {
           // Do nothing if item exists and has already been voted by user
-          if (itemExists.votes.includes(userId)) {
+          if (itemExists.votes.includes(context.userId)) {
             return itemExists;
           }
 
@@ -84,7 +88,7 @@ export const ListItemMutation = extendType({
               id: itemExists.id,
             },
             data: {
-              votes: [...itemExists.votes, userId],
+              votes: [...itemExists.votes, context.userId],
             },
           });
         }
@@ -93,7 +97,7 @@ export const ListItemMutation = extendType({
         return await context.prisma.listItem.create({
           data: {
             name: name,
-            votes: [userId],
+            votes: [context.userId],
             list: {
               connect: {
                 id: listId,
@@ -108,10 +112,13 @@ export const ListItemMutation = extendType({
       type: "ListItem",
       args: {
         itemId: nonNull(stringArg()),
-        userId: nonNull(stringArg()),
       },
       async resolve(_, args, context) {
-        const { itemId, userId } = args;
+        const { itemId } = args;
+
+        if (!context.userId) {
+          throw new ApolloError(`Authentication failed.`);
+        }
 
         const item = await context.prisma.listItem.findUnique({
           where: {
@@ -123,7 +130,7 @@ export const ListItemMutation = extendType({
           throw new ApolloError(`The item you voted for does not exist.`);
         }
 
-        if (item.votes.includes(userId)) {
+        if (item.votes.includes(context.userId)) {
           // Remove vote from item if user has already voted for it
           if (item.votes.length === 1) {
             // Remove item if it has been the only remaining vote
@@ -134,7 +141,7 @@ export const ListItemMutation = extendType({
           return await context.prisma.listItem.update({
             where: { id: itemId },
             data: {
-              votes: item.votes.filter((v) => v !== userId),
+              votes: item.votes.filter((v) => v !== context.userId),
             },
           });
         }
@@ -144,7 +151,7 @@ export const ListItemMutation = extendType({
             id: itemId,
           },
           data: {
-            votes: [...item.votes, userId],
+            votes: [...item.votes, context.userId],
           },
         });
       },
